@@ -1,14 +1,13 @@
 package services
 
 import (
-	"example/web-service-go/application/core/domain/models"
-	"example/web-service-go/application/port/out/repository"
+	"example/web-service-go/infrastructure/adapters/out/repo"
 )
 
 type AllAlbumsService struct {
-	Repo repository.GetAllAlbumsRepo
+	Repo repo.Album
 }
 
-func (a AllAlbumsService) GetAllAlbumsExec() []models.Album {
-	a.Repo.GetAllAlbumsData()
+func (a AllAlbumsService) GetAllAlbumsExec() []repo.Album {
+	return a.Repo.GetAllAlbumsData()
 }

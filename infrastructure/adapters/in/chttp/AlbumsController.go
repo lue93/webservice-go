@@ -8,7 +8,7 @@ import (
 )
 
 type AllAlbumController struct {
-	service services.AllAlbumsService
+	Service services.AllAlbumsService
 }
 
 type AllAlbumsResponse struct {
@@ -16,7 +16,7 @@ type AllAlbumsResponse struct {
 }
 
 func (a AllAlbumController) Handle(w http.ResponseWriter, r *http.Request) {
-	data := a.service.GetAllAlbumsExec()
+	data := a.Service.GetAllAlbumsExec()
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	responseBody, err := json.MarshalIndent(data, "", "  ")
