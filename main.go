@@ -1,7 +1,9 @@
 package main
 
 import (
+	"example/web-service-go/application/core/domain/services"
 	"example/web-service-go/infrastructure/adapters/in/chttp"
+	"example/web-service-go/infrastructure/adapters/out/repo"
 	"fmt"
 	"net/http"
 
@@ -20,8 +22,18 @@ func logger(next http.Handler) http.Handler {
 	})
 }
 
+func buildContainer() Container {
+	repository := repo.Album{}
+	service := services.AllAlbumsService{repository}
+	controller := chttp.AllAlbumController{service}
+
+	return Container{controller}
+}
+
 // A standalone program (as opposed to a library) is always in package main.
 func main() {
+	container := buildContainer()
+
 	r := mux.NewRouter()
 	r.Use(logger)
 
@@ -30,9 +42,11 @@ func main() {
 	})
 
 	r.HandleFunc("/albums", func(w http.ResponseWriter, r *http.Request) {
-		controller := chttp.AllAlbumController{}
-		controller.Handle(w, r)
+		container.allAlbumsController.Handle(w, r)
 	})
+
+	fmt.Println("🚀 Servidor iniciado em http://localhost:8080")
+
 	// Start the server.
 	http.ListenAndServe(":8080", r)
 
